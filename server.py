@@ -5,7 +5,7 @@ from flask import Flask
 
 app = Flask(__name__)
 
-port = int(os.environ.get("PORT", 5000))
+port = int(os.environ.get("PORT", 8080))
 
 @app.route('/')
 def home():
@@ -13,7 +13,7 @@ def home():
     ## Streamed completion
     response = g4f.ChatCompletion.create(
         model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": "Buna, ce faci?"}],
+        messages=[{"role": "user", "content": "Hola, como estas?"}],
         stream=True,
     )
     sol = ""
