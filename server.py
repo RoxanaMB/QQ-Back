@@ -18,7 +18,7 @@ def home():
 
     response = g4f.ChatCompletion.create(
         model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": "Hola, como estas?"}],
+        messages=[{"role": "user", "content": "Que pasó en la primera querra mundial?"}],
         stream=True,
     )
     # sol = ""
@@ -27,7 +27,10 @@ def home():
     #     print(message)
         
     def generate():
+        sol = ""
         for part in response:
+            sol += part
+            print(part)
             yield part.format(json.dumps(part))
 
     # return Response(generate(), mimetype='text/event-stream')
