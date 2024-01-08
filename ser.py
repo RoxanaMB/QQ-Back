@@ -19,6 +19,7 @@ def home():
 
         response = g4f.ChatCompletion.create(
             model="gpt-3.5-turbo",
+            provider=g4f.Provider.Aichat,
             messages=[
                 {"role": "user", "content": request.form['question']}
             ],
