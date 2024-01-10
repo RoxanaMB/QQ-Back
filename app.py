@@ -73,15 +73,11 @@ def login():
     data = request.get_json()
 
     # Obtener usuario
-    res = supabase.table('users').select().eq('username', data['username']).execute().get('data')[0]
-
+    res = supabase.auth.sign_in_with_password({"email": data['email'], "password": data['password']})
+    
     # Si no existe el usuario
     if not res:
         return jsonify({'message': 'User does not exist'}), 401
-
-    # Si la contraseña es incorrecta
-    if not check_password_hash(res['password'], data['password']):
-        return jsonify({'message': 'Incorrect password'}), 401
 
     # Crear token
     token = res.session.access_token
