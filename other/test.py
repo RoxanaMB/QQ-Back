@@ -1,4 +1,4 @@
-from db import supabase
+from server.db import supabase
 
 email: str = 'roxanababa5@gmail.com'
 password: str = 'roxanababa18'

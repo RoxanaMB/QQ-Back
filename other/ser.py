@@ -37,8 +37,8 @@ def home():
         question = 'Yo: ' + request.form['question']
 
         response = g4f.ChatCompletion.create(
-            model=g4f.models.llama2_70b,
-            provider=g4f.Provider.DeepInfra,
+            provider=g4f.Provider.ChatgptNext,
+            model="gpt-3.5-turbo",
             messages=[
                 {"role": "user", "content": request.form['question']}
             ],
