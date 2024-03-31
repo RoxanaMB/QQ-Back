@@ -5,8 +5,11 @@ import jwt
 from functools import wraps 
 from server.db import supabase
 
+
 # Crear blueprint
 user = Blueprint('user', __name__)
+
+
 
 # Crear rutas para un login y un registro de usuarios
 # Crear decorador para verificar token
@@ -36,6 +39,8 @@ def token_required(f):
 
     return decorated
 
+
+
 # Crear ruta para registrar usuario
 @user.route('/register', methods=['POST'])
 def register():
@@ -59,6 +64,8 @@ def register():
     # Retornar token
     return jsonify({'token': token})
 
+
+
 # Crear ruta para hacer login
 @user.route('/login', methods=['POST'])
 def login():
@@ -78,6 +85,8 @@ def login():
     # Retornar token
     return jsonify({'token': token})
 
+
+
 # Crear ruta para obtener todos los usuarios
 @user.route('/users', methods=['GET'])
 @token_required
@@ -87,6 +96,8 @@ def get_all_users(current_user):
 
     # Retornar usuarios
     return jsonify(users)
+
+
 
 # Crear ruta para obtener un usuario
 @user.route('/users/<id>', methods=['GET'])
@@ -98,6 +109,8 @@ def get_one_user(current_user, id):
     # Retornar usuario
     return jsonify(user)
 
+
+
 # Crear ruta para eliminar un usuario
 @user.route('/users/<id>', methods=['DELETE'])
 @token_required
@@ -107,6 +120,8 @@ def delete_user(current_user, id):
 
     # Retornar mensaje
     return jsonify({'message': 'User has been deleted'})
+
+
 
 # Crear ruta para actualizar un usuario
 @user.route('/users/<id>', methods=['PUT'])
