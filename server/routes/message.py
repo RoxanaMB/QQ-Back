@@ -1,6 +1,4 @@
 from flask import request, jsonify, Blueprint
-from werkzeug.security import generate_password_hash
-import os
 from functools import wraps 
 from server.db import supabase
 
@@ -38,6 +36,7 @@ def create_message():
         "content": data['content']
     }]
 
+    # TODO: dependiendo del data['ia_model'] se selecciona el modelo de IA
     response = mistral.predict().get('choices')[0].get('message').get('content')
 
     # Añadir respuesta a la tabla messages de la base de datos
