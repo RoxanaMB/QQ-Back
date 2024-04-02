@@ -18,7 +18,7 @@ class Mistral7bInstruct:
             "presence_penalty": 0,
             "frequency_penalty": 0,
             "temperature": 0.6,
-            "messages": []
+            "messages": [],
         }
 
     def predict(self):
