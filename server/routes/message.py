@@ -33,9 +33,10 @@ def create_message():
 
     # Añadir mensaje a la tabla messages de la base de datos
     supabase.table('messages').insert([{
-      'content': data['content'],
-      'topic': data['topic'],
-      'rate': data['rate'],
+        'content': data["content"][-1]["content"],
+        'topic': data['topic'],
+        'rate': data['rate'],
+        'chat': data['chat'],
     }]).execute()
 
     # Mandar mensaje a la IA
@@ -63,18 +64,16 @@ def create_message():
     
 
     ia_model.payload['messages'] = data['content']
-
-    print(ia_model)
-
-    json_data = json.dumps(ia_model.predict())
-    print(json_data)
-
     response = ia_model.predict().get('choices')[0].get('message').get('content')
-    # response = ia_model.predict()
 
     # Añadir respuesta a la tabla messages de la base de datos
+    if data['ia_model'] == "":
+        data['ia_model'] = 'FireFunction v1'
+
     supabase.table('messages').insert([{
       'content': response,
+      'chat': data['chat'],
+      'model': data['ia_model'],
     }]).execute()
 
     return jsonify({'message': 'Message created', 'response': response})

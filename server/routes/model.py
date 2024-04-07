@@ -12,4 +12,5 @@ model = Blueprint('model', __name__)
 @model.route('/models', methods=['GET'])
 def get_models():
     models = supabase.table('models').select("*").execute()
+    print(models)
     return jsonify(models.data)
