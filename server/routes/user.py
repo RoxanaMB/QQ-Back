@@ -27,11 +27,11 @@ def token_required(f):
             return jsonify({'message': 'Token is missing'}), 401
 
         try:
-            # Verificar token
-            data = jwt.decode(token, os.getenv('SECRET_KEY'), algorithms=["HS256"])
+            # Verificar token con supabase
+            data = supabase.auth.get_user(token)
             # Obtener usuario
-            current_user = supabase.table('users').select().eq('id', data['id']).execute().get('data')[0]
-        except:
+            current_user = data.user
+        except Exception as e:
             return jsonify({'message': 'Token is invalid'}), 401
 
         # Retornar funcion
@@ -83,7 +83,7 @@ def login():
     token = res.session.access_token
 
     # Retornar token
-    return jsonify({'token': token})
+    return jsonify({'token': token, 'user_name': res.user.user_metadata['username'], 'user_id': res.user.id, 'email': res.user.email})
 
 
 
@@ -100,14 +100,12 @@ def get_all_users(current_user):
 
 
 # Crear ruta para obtener un usuario
-@user.route('/users/<id>', methods=['GET'])
+@user.route('/user', methods=['GET'])
 @token_required
-def get_one_user(current_user, id):
-    # Obtener usuario
-    user = supabase.table('users').select().eq('id', id).execute().get('data')[0]
+def get_one_user(current_user):
 
     # Retornar usuario
-    return jsonify(user)
+    return jsonify({'user_name': current_user.user_metadata['username'], 'user_id': current_user.id, 'email': current_user.email})
 
 
 
