@@ -12,6 +12,7 @@ from models.llama2_70b_chat import Llama270bChat
 from models.mistral_7b_instruct import Mistral7bInstruct
 from models.mixtral_8x7b_instruct import Mixtral8x7bInstruct
 from models.mythomax_l2_13b import MythomaxL213b
+from models.chat_gpt import chat_gpt
 
 
 # Crear blueprint
@@ -23,7 +24,6 @@ message = Blueprint('message', __name__)
 def get_messages():
     messages = supabase.get_messages()
     return jsonify(messages)
-
 
 
 # Ruta para crear un mensaje
@@ -66,6 +66,18 @@ def create_message():
     ia_model.payload['messages'] = data['content']
     response = ia_model.predict().get('choices')[0].get('message').get('content')
 
+    chat_gpt_response = chat_gpt(response).content
+
+    # Guardar calificación, tema y justificación en un objeto
+    cal = chat_gpt_response.split("Calificación: ")[1].split("\n")[0]
+    tema = chat_gpt_response.split("Tema: ")[1].split("\n")[0]
+    just = chat_gpt_response.split("Justificación: ")[1].split("\n")[0]
+
+    print("--------------------------------------")
+    print(cal)
+    print(tema)
+    print(just)
+
     # Añadir respuesta a la tabla messages de la base de datos
     if data['ia_model'] == "":
         data['ia_model'] = 'FireFunction v1'
@@ -74,9 +86,11 @@ def create_message():
       'content': response,
       'chat': data['chat'],
       'model': data['ia_model'],
+      'topic': tema,
+      'rate': cal,
     }]).execute()
 
-    return jsonify({'message': 'Message created', 'response': response})
+    return jsonify({'message': 'Message created', 'response': response, 'cal': cal, 'tema': tema, 'just': just})
 
 
 
