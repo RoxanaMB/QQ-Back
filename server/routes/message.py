@@ -61,7 +61,6 @@ def create_message():
         ia_model = Mixtral8x7bInstruct()
     elif data['ia_model'] == 'MythoMax L2 13B':
         ia_model = MythomaxL213b()
-    
 
     ia_model.payload['messages'] = data['content']
     response = ia_model.predict().get('choices')[0].get('message').get('content')
@@ -72,11 +71,6 @@ def create_message():
     cal = chat_gpt_response.split("Calificación: ")[1].split("\n")[0]
     tema = chat_gpt_response.split("Tema: ")[1].split("\n")[0]
     just = chat_gpt_response.split("Justificación: ")[1].split("\n")[0]
-
-    print("--------------------------------------")
-    print(cal)
-    print(tema)
-    print(just)
 
     # Añadir respuesta a la tabla messages de la base de datos
     if data['ia_model'] == "":
