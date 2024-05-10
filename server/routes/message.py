@@ -65,12 +65,30 @@ def create_message():
     ia_model.payload['messages'] = data['content']
     response = ia_model.predict().get('choices')[0].get('message').get('content')
 
-    chat_gpt_response = chat_gpt(response).content
+    chat_gpt_response = chat_gpt(data["content"][-1]["content"], response).content
 
     # Guardar calificación, tema y justificación en un objeto
-    cal = chat_gpt_response.split("Calificación: ")[1].split("\n")[0]
-    tema = chat_gpt_response.split("Tema: ")[1].split("\n")[0]
-    just = chat_gpt_response.split("Justificación: ")[1].split("\n")[0]
+        # cal = chat_gpt_response.split("Calificación: ")[1].split("\n")[0] || 0
+        # tema = chat_gpt_response.split("Tema: ")[1].split("\n")[0] || ""
+        # just = chat_gpt_response.split("Justificación: ")[1].split("\n")[0] || ""
+
+    cal = 0
+    tema = ""
+    just = ""
+
+    if "Calificación: " in chat_gpt_response:
+        cal = chat_gpt_response.split("Calificación: ")[1].split("\n")[0]
+    if "Tema: " in chat_gpt_response:
+        tema = chat_gpt_response.split("Tema: ")[1].split("\n")[0]
+    if "Justificación: " in chat_gpt_response:
+        just = chat_gpt_response.split("Justificación: ")[1].split("\n")[0]
+
+
+    print("--------------------------------------------------")
+    print('Calificación:', cal)
+    print('Tema:', tema)
+    print('Justificación:', just)
+    print("--------------------------------------------------")
 
     # Añadir respuesta a la tabla messages de la base de datos
     if data['ia_model'] == "":
