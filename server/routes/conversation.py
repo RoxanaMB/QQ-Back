@@ -39,3 +39,11 @@ def get_conversations(user):
     # Obtener conversaciones
     conversations = supabase.table('conversations').select('*').eq('user', user).execute()
     return jsonify(conversations.data)
+
+
+# Obtener una conversación
+@conversation.route('/conversation/<id>', methods=['GET'])
+def get_conversation(id):
+    # Obtener conversación
+    conversation = supabase.table('conversations').select('*').eq('id', id).execute()
+    return jsonify(conversation.data)
