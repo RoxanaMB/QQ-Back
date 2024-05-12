@@ -84,11 +84,11 @@ def create_message():
         just = chat_gpt_response.split("Justificación: ")[1].split("\n")[0]
 
 
-    print("--------------------------------------------------")
-    print('Calificación:', cal)
-    print('Tema:', tema)
-    print('Justificación:', just)
-    print("--------------------------------------------------")
+    # print("--------------------------------------------------")
+    # print('Calificación:', cal)
+    # print('Tema:', tema)
+    # print('Justificación:', just)
+    # print("--------------------------------------------------")
 
     # Añadir respuesta a la tabla messages de la base de datos
     if data['ia_model'] == "":
