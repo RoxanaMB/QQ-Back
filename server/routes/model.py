@@ -1,6 +1,4 @@
-from flask import request, jsonify, Blueprint
-import os
-from functools import wraps 
+from flask import jsonify, Blueprint
 from server.db import supabase
 
 
@@ -14,3 +12,4 @@ def get_models():
     models = supabase.table('models').select("*").execute()
     print(models)
     return jsonify(models.data)
+

@@ -1,7 +1,5 @@
 from flask import request, jsonify, Blueprint
-from functools import wraps 
 from server.db import supabase
-import json
 
 from models.fire_function_v1 import FireFunctionV1
 from models.gemma_7b_instruct import Gemma7bIt
@@ -69,11 +67,6 @@ def create_message():
 
     chat_gpt_response = chat_gpt(data["content"][-1]["content"], response).content
 
-    # Guardar calificación, tema y justificación en un objeto
-        # cal = chat_gpt_response.split("Calificación: ")[1].split("\n")[0] || 0
-        # tema = chat_gpt_response.split("Tema: ")[1].split("\n")[0] || ""
-        # just = chat_gpt_response.split("Justificación: ")[1].split("\n")[0] || ""
-
     cal = 0
     tema = ""
     just = ""
@@ -84,13 +77,6 @@ def create_message():
         tema = chat_gpt_response.split("Tema: ")[1].split("\n")[0]
     if "Justificación: " in chat_gpt_response:
         just = chat_gpt_response.split("Justificación: ")[1].split("\n")[0]
-
-
-    # print("--------------------------------------------------")
-    # print('Calificación:', cal)
-    # print('Tema:', tema)
-    # print('Justificación:', just)
-    # print("--------------------------------------------------")
 
     # Añadir respuesta a la tabla messages de la base de datos
     if data['ia_model'] == "":
@@ -107,23 +93,29 @@ def create_message():
       'name': data['ia_model']
     }]).execute()
 
+    # Actualizar calificación del modelo
+    rate = get_model_messages(data['ia_model'])
+
+    supabase.table('models').update({
+        'rate': rate
+    }).eq('name', data['ia_model']).execute()
+
     return jsonify({'message': 'Message created', 'response': response, 'cal': cal, 'tema': tema, 'just': just})
 
 
+# Función para obtener las calificaciones de los mensajes de un modelo
+def get_model_messages(model):
+    messages = supabase.table('messages').select('*').eq('model', model).execute()
 
-# # Ruta para obtener un mensaje
-# @message.route('/message/<int:id>', methods=['GET'])
-# @login_required
-# def get_message(id):
-#     message = supabase.get_message(id)
-#     return jsonify(message)
+    # Recolectar calificaciones
+    rates = []
+    for message in messages.data:
+        if message['rate'] != '':
+            rates.append(int(message['rate']))
 
-
-
-# # Ruta para obtener los mensajes de un usuario
-# @message.route('/user/messages', methods=['GET'])
-# @login_required
-# def get_user_messages():
-#     messages = supabase.get_user_messages()
-#     return jsonify(messages)
+    # Calcular promedio
+    if len(rates) == 0:
+        return 0
+    else:
+        return sum(rates) / len(rates)
 
