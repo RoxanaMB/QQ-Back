@@ -37,6 +37,8 @@ def create_message():
         'topic': data['topic'],
         'rate': data['rate'],
         'chat': data['chat'],
+        'role': 'user',
+        'name': data['name']
     }]).execute()
 
     # Mandar mensaje a la IA
@@ -100,6 +102,9 @@ def create_message():
       'model': data['ia_model'],
       'topic': tema,
       'rate': cal,
+      'role': 'assistant',
+      'just': just,
+      'name': data['ia_model']
     }]).execute()
 
     return jsonify({'message': 'Message created', 'response': response, 'cal': cal, 'tema': tema, 'just': just})
