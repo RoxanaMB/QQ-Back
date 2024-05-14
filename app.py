@@ -9,7 +9,7 @@ from server.routes.conversation import conversation
 
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
+CORS(app)
 
 
 app.register_blueprint(user)
