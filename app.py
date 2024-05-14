@@ -11,6 +11,7 @@ from server.routes.conversation import conversation
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
+
 app.register_blueprint(user)
 app.register_blueprint(message)
 app.register_blueprint(model)

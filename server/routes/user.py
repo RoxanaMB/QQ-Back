@@ -1,7 +1,5 @@
 from flask import request, jsonify, Blueprint
 from werkzeug.security import generate_password_hash
-import os
-import jwt
 from functools import wraps 
 from server.db import supabase
 

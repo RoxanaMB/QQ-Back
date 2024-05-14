@@ -1,6 +1,4 @@
 from flask import request, jsonify, Blueprint
-import os
-from functools import wraps 
 from server.db import supabase
 
 
