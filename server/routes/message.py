@@ -3,7 +3,6 @@ from server.db import supabase
 
 from models.fire_function_v1 import FireFunctionV1
 from models.gemma_7b_instruct import Gemma7bIt
-from models.hermes2_pro_mistral_7b import Hermes2ProMistral7b
 from models.llama2_13b_chat import Llama213bChat
 from models.llama2_13b_code_instruct import Llama213bCodeInstruct
 from models.llama2_70b_chat import Llama270bChat
@@ -46,8 +45,6 @@ def create_message():
         ia_model = FireFunctionV1()
     elif data['ia_model'] == 'Gemma 7B Instruct':
         ia_model = Gemma7bIt()
-    elif data['ia_model'] == 'Hermes 2 Pro Mistral 7B':
-        ia_model = Hermes2ProMistral7b()
     elif data['ia_model'] == 'Llama2 13B Chat':
         ia_model = Llama213bChat()
     elif data['ia_model'] == 'Llama2 13B Code Instruct':
