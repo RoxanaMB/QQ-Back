@@ -15,8 +15,8 @@ def create_conversation():
     # Obtener los primeros 15 caracteres del título
     title = data['body']['message']
 
-    if len(title) > 30:
-        title = title[:30] + '...'
+    if len(title) > 25:
+        title = title[:25] + '...'
     else:
         title = title
 
